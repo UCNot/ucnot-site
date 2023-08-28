@@ -28,10 +28,11 @@
   "dependencies": {
     "@proc7ts/async": "^2.1.0",
     "@proc7ts/primitives": "^4.0.1",
-    "@types/node": "^18.17.11",
     "ejs": "^3.1.9",
+    "foundation-sites": "^6.8.1",
     "marked": "^7.0.5",
     "marked-highlight": "^2.0.4",
+    "motion-ui": "^2.0.5",
     "shiki": "^0.14.3"
   },
   "devDependencies": {
@@ -39,6 +40,7 @@
     "@run-z/prettier-config": "^2.0.0",
     "@run-z/project-config": "^0.20.0",
     "@types/ejs": "^3.1.2",
+    "@types/node": "^18.17.11",
     "@typescript-eslint/eslint-plugin": "^6.4.1",
     "@typescript-eslint/parser": "^6.4.1",
     "eslint": "^8.48.0",
@@ -47,13 +49,20 @@
     "prettier-eslint-cli": "^7.1.0",
     "rollup": "^3.28.1",
     "run-z": "^1.11.0",
+    "sass": "^1.66.1",
     "tslib": "^2.6.2",
     "typedoc": "^0.25.0",
     "typescript": "~5.2.2"
   },
+  "pnpm": {
+    "overrides": {
+      "motion-ui@latest": "^2.0.5"
+    }
+  },
   "scripts": {
     "all": "run-z build,lint",
-    "build": "run-z +z compile --then node --enable-source-maps ./dist/main.js",
+    "build": "run-z +z compile,build:sass --then node --enable-source-maps ./dist/main.js",
+    "build:sass": "run-z +z --then sass -s compressed --source-map -I node_modules/foundation-sites/scss -I node_modules/motion-ui/src src/scss/app.scss target/site/css/app.css",
     "compile": "run-z +z --then build-z",
     "ci:all": "run-z all +test/--ci/--runInBand",
     "clean": "run-z +z --then clean-z",
@@ -62,6 +71,6 @@
     "format": "run-z +z --then prettier-eslint --write --include-dot-files \"src/**/*.*\" \"*.{js,cjs,json,md}\"",
     "lint": "run-z +z --then eslint .",
     "test": "run-z +z",
-    "z": "run-z +cmd:build-z,+cmd:typedoc,+cmd:eslint"
+    "z": "run-z +cmd:build-z,+cmd:typedoc,+cmd:eslint,+cmd:sass"
   }
 }
