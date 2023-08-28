@@ -1,0 +1,67 @@
+{
+  "name": "@ucnot/site",
+  "version": "0.1.0",
+  "description": "UCNot documentation site",
+  "keywords": [
+    "charged-uri",
+    "matrix-uri",
+    "matrix-url",
+    "rfc3986",
+    "schema",
+    "uri",
+    "uri-charge",
+    "url",
+    "validator"
+  ],
+  "private": true,
+  "homepage": "https://ucnot.github.io/",
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@github.com:UCNot/ucnot-site.git"
+  },
+  "license": "MIT",
+  "author": "Ruslan Lopatin <ruslan.lopatin@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/UCNot/ucnot-site/issues"
+  },
+  "type": "module",
+  "dependencies": {
+    "@proc7ts/async": "^2.1.0",
+    "@proc7ts/primitives": "^4.0.1",
+    "@types/node": "^18.17.11",
+    "ejs": "^3.1.9",
+    "marked": "^7.0.5",
+    "marked-highlight": "^2.0.4",
+    "shiki": "^0.14.3"
+  },
+  "devDependencies": {
+    "@run-z/eslint-config": "^3.5.0",
+    "@run-z/prettier-config": "^2.0.0",
+    "@run-z/project-config": "^0.20.0",
+    "@types/ejs": "^3.1.2",
+    "@typescript-eslint/eslint-plugin": "^6.4.1",
+    "@typescript-eslint/parser": "^6.4.1",
+    "eslint": "^8.48.0",
+    "gh-pages": "^6.0.0",
+    "prettier": "^2.8.8",
+    "prettier-eslint-cli": "^7.1.0",
+    "rollup": "^3.28.1",
+    "run-z": "^1.11.0",
+    "tslib": "^2.6.2",
+    "typedoc": "^0.25.0",
+    "typescript": "~5.2.2"
+  },
+  "scripts": {
+    "all": "run-z build,lint",
+    "build": "run-z +z compile --then node --enable-source-maps ./dist/main.js",
+    "compile": "run-z +z --then build-z",
+    "ci:all": "run-z all +test/--ci/--runInBand",
+    "clean": "run-z +z --then clean-z",
+    "doc": "run-z +z --then typedoc",
+    "doc:publish": "run-z doc --then gh-pages --dist target/typedoc --dotfiles",
+    "format": "run-z +z --then prettier-eslint --write --include-dot-files \"src/**/*.*\" \"*.{js,cjs,json,md}\"",
+    "lint": "run-z +z --then eslint .",
+    "test": "run-z +z",
+    "z": "run-z +cmd:build-z,+cmd:typedoc,+cmd:eslint"
+  }
+}
