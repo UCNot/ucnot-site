@@ -1,6 +1,6 @@
 # ChURI
 
-ChURI is a polyglot serializer, deserializer and validator supporting different data formats.
+ChURI is a polyglot serializer, deserializer and validator supporting various data formats.
 
 The data processing is based on data schemas. Schemas are written in TypeScript. ChURI compiles such schemas into
 efficient code implementing serializers, deserializers, and validators for the data conforming to those schemas.
