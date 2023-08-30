@@ -5,8 +5,8 @@ ChURI is a polyglot serializer, deserializer and validator supporting various da
 The data processing is based on data schemas. Schemas are written in TypeScript. ChURI compiles such schemas into
 efficient code implementing serializers, deserializers, and validators for the data conforming to those schemas.
 
-The main data format supported is URI Charge Notation, which is used to encode data included into URI. Such URI
-is called Charged URI, or ChURI.
+The core data format encodes the data with URI Charge Notation. It is designed to pass structured data inside URI.
+Such URI is called Charged URI, or just ChURI.
 
 Other data formats supported out of the box:
 
