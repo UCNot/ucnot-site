@@ -10,7 +10,7 @@ module.exports = {
       },
     },
     {
-      files: ['*.ts'],
+      files: ['*.ts', '*.tsx'],
       extends: ['@run-z/eslint-config/typescript'],
       parser: '@typescript-eslint/parser',
       parserOptions: {

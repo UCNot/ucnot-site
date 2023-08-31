@@ -33,7 +33,8 @@
     "marked": "^7.0.5",
     "marked-highlight": "^2.0.4",
     "motion-ui": "^2.0.5",
-    "shiki": "^0.14.3"
+    "shiki": "^0.14.3",
+    "typedoc": "^0.25.0"
   },
   "devDependencies": {
     "@run-z/eslint-config": "^3.5.0",
@@ -51,7 +52,6 @@
     "run-z": "^1.11.0",
     "sass": "^1.66.1",
     "tslib": "^2.6.2",
-    "typedoc": "^0.25.0",
     "typescript": "~5.2.2"
   },
   "pnpm": {
@@ -61,16 +61,16 @@
   },
   "scripts": {
     "all": "run-z build,lint",
-    "build": "run-z +z compile,build:sass --then node --enable-source-maps ./dist/main.js",
+    "build": "run-z build:site doc --then node --enable-source-maps ./dist/main.js",
     "build:sass": "run-z +z --then sass -s compressed --source-map -I node_modules/foundation-sites/scss -I node_modules/motion-ui/src src/scss/app.scss target/site/css/app.css",
+    "build:site": "run-z +z build:sass,compile --then node --enable-source-maps ./dist/main.js",
     "compile": "run-z +z --then build-z",
     "ci:all": "run-z all +test/--ci/--runInBand",
     "clean": "run-z +z --then clean-z",
-    "doc": "run-z +z --then typedoc",
-    "doc:publish": "run-z doc --then gh-pages --dist target/typedoc --dotfiles",
+    "doc": "run-z +z compile --then typedoc --theme ucnot",
     "format": "run-z +z --then prettier-eslint --write --include-dot-files \"src/**/*.*\" \"*.{js,cjs,json,md}\"",
     "lint": "run-z +z --then eslint .",
     "test": "run-z +z",
-    "z": "run-z +cmd:build-z,+cmd:typedoc,+cmd:eslint,+cmd:sass"
+    "z": "run-z +cmd:build-z,+cmd:eslint,+cmd:sass"
   }
 }

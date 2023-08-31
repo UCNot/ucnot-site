@@ -8,6 +8,10 @@ export default new ProjectConfig({
           source: './src/main.ts',
           default: './dist/main.js',
         },
+        './typedoc.plugin.js': {
+          source: './src/typedoc/plugin.ts',
+          default: './dist/typedoc.plugin.js',
+        },
       },
     },
   },

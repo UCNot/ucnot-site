@@ -1,0 +1,15 @@
+.uc-container {
+  @extend .grid-container, .fluid;
+}
+.uc-grid {
+  @extend .grid-x, .grid-margin-x;
+}
+.uc-content {
+  @extend .cell, .medium-auto, .medium-order-2, .small-12, .small-order-1;
+}
+.uc-site-menu {
+  @extend .cell, .medium-3, .medium-order-1, .small-12, .small-order-2;
+}
+.uc-page-menu {
+  @extend .cell, .large-3, .large-order-3, .show-for-large;
+}

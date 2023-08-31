@@ -1,0 +1,36 @@
+:root {
+  --color-background: var(--dark-color-background);
+  --color-background-secondary: var(--dark-color-background-secondary);
+  --color-background-warning: var(--dark-color-background-warning);
+  --color-warning-text: var(--dark-color-warning-text);
+  --color-icon-background: var(--dark-color-icon-background);
+  --color-accent: var(--dark-color-accent);
+  --color-active-menu-item: var(--dark-color-active-menu-item);
+  --color-text: var(--dark-color-text);
+  --color-text-aside: var(--dark-color-text-aside);
+  --color-link: var(--dark-color-link);
+
+  --color-ts-module: var(--dark-color-ts-module);
+  --color-ts-namespace: var(--dark-color-ts-namespace);
+  --color-ts-enum: var(--dark-color-ts-enum);
+  --color-ts-enum-member: var(--dark-color-ts-enum-member);
+  --color-ts-variable: var(--dark-color-ts-variable);
+  --color-ts-function: var(--dark-color-ts-function);
+  --color-ts-class: var(--dark-color-ts-class);
+  --color-ts-interface: var(--dark-color-ts-interface);
+  --color-ts-constructor: var(--dark-color-ts-constructor);
+  --color-ts-property: var(--dark-color-ts-property);
+  --color-ts-method: var(--dark-color-ts-method);
+  --color-ts-call-signature: var(--dark-color-ts-call-signature);
+  --color-ts-index-signature: var(--dark-color-ts-index-signature);
+  --color-ts-constructor-signature: var(--dark-color-ts-constructor-signature);
+  --color-ts-parameter: var(--dark-color-ts-parameter);
+  --color-ts-type-parameter: var(--dark-color-ts-type-parameter);
+  --color-ts-accessor: var(--dark-color-ts-accessor);
+  --color-ts-get-signature: var(--dark-color-ts-get-signature);
+  --color-ts-set-signature: var(--dark-color-ts-set-signature);
+  --color-ts-type-alias: var(--dark-color-ts-type-alias);
+
+  --external-icon: var(--dark-external-icon);
+  --color-scheme: var(--dark-color-scheme);
+}

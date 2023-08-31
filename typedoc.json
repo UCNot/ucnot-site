@@ -1,0 +1,9 @@
+{
+  "entryPoints": ["../churi", "../esgen", "../ts-transformer-churi"],
+  "entryPointStrategy": "packages",
+  "name": "UCNot",
+  "out": "./target/site/api-doc",
+  "plugin": ["./dist/typedoc.plugin.js"],
+  "readme": "src/content/none",
+  "sort": ["static-first", "visibility", "enum-value-ascending", "alphabetical", "kind"]
+}
