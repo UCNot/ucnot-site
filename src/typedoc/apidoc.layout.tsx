@@ -1,6 +1,6 @@
 import { DefaultThemeRenderContext, PageEvent, Reflection, RenderTemplate, JSX } from 'typedoc';
 
-export const ucnotLayout = (
+export const apiDocLayout = (
   context: DefaultThemeRenderContext,
   template: RenderTemplate<PageEvent<Reflection>>,
   props: PageEvent<Reflection>,

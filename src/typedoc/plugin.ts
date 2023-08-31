@@ -1,6 +1,6 @@
 import { Application } from 'typedoc';
-import { UCNotTheme } from './ucnot.theme.js';
+import { ApiDocTheme } from './apidoc.theme.js';
 
 export function load(app: Application): void {
-  app.renderer.defineTheme('ucnot', UCNotTheme);
+  app.renderer.defineTheme('ucnot', ApiDocTheme);
 }

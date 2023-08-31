@@ -1,34 +1,31 @@
 import { PromiseResolver } from '@proc7ts/async';
 import { noop } from '@proc7ts/primitives';
+import { JSX } from 'typedoc';
 import { SourceLayout } from '../fs/source-layout.js';
 import { TargetLayout } from '../fs/target-layout.js';
-import { HtmlTemplateData } from '../render/html-template.js';
 import { MdRenderer } from '../render/md-renderer.js';
-import { TemplateEngine } from '../render/template-engine.js';
+import { PageContext } from '../render/page-context.js';
+import { PageData, PageLayout, defaultPageLayout } from '../render/page.layout.js';
 
 export class SiteBuilder {
 
   readonly #sourceLayout: SourceLayout;
   readonly #targetLayout: TargetLayout;
   readonly #mdRenderer: MdRenderer;
-  readonly #templateEngine: TemplateEngine;
   #build: SiteBuild = { tasks: [] };
 
   constructor({
     sourceLayout,
     targetLayout,
     mdRenderer,
-    templateEngine,
   }: {
     readonly sourceLayout: SourceLayout;
     readonly targetLayout: TargetLayout;
     readonly mdRenderer: MdRenderer;
-    readonly templateEngine: TemplateEngine;
   }) {
     this.#sourceLayout = sourceLayout;
     this.#targetLayout = targetLayout;
     this.#mdRenderer = mdRenderer;
-    this.#templateEngine = templateEngine;
   }
 
   runTask<T>(task: (builder: SiteBuilder) => Promise<T>): () => Promise<T> {
@@ -48,27 +45,25 @@ export class SiteBuilder {
     return whenDone;
   }
 
-  mdToHtml<TData extends HtmlTemplateData>(
+  mdPage<T extends PageData>(
     htmlPath: string,
     {
-      title,
       mdPath,
-      template,
+      layout = defaultPageLayout,
       data,
     }: {
-      readonly title: string;
       readonly mdPath: string;
-      readonly template: string;
-      readonly data?: TData | undefined;
+      readonly layout?: PageLayout<T> | undefined;
+      readonly data: Omit<T, 'context'>;
     },
   ): () => Promise<void> {
     return this.runTask(async () => {
-      const pageTemplate = this.#templateEngine.openPageTemplate(template);
       const md = await this.#sourceLayout.contentDir().openFile(mdPath).readText();
       const content = await this.#mdRenderer.renderMarkdown(md);
-      const html = await pageTemplate.renderHtml({ ...data, title, content });
+      const context = new PageContext(htmlPath);
+      const html = layout(() => content, { ...data, context } as T);
 
-      await this.#targetLayout.siteDir().openFile(htmlPath).writeText(html);
+      await this.#targetLayout.siteDir().openFile(htmlPath).writeText(JSX.renderElement(html));
     });
   }
 
