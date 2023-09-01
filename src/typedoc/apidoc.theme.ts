@@ -12,14 +12,18 @@ import { apiDocToolbar } from './apidoc.toolbar.js';
 
 export class ApiDocTheme extends DefaultTheme {
 
-  #context?: ApiDocThemeRenderContext;
+  readonly #contexts = new Map<string, ApiDocThemeRenderContext>();
 
-  override getRenderContext(pageEvent: PageEvent<Reflection>): DefaultThemeRenderContext {
-    return (this.#context ??= new ApiDocThemeRenderContext(
-      this,
-      pageEvent,
-      this.application.options,
-    ));
+  override getRenderContext(pageEvent: PageEvent<Reflection>): ApiDocThemeRenderContext {
+    const { url } = pageEvent;
+    let context = this.#contexts.get(url);
+
+    if (!context) {
+      context = new ApiDocThemeRenderContext(this, pageEvent, this.application.options);
+      this.#contexts.set(url, context);
+    }
+
+    return context;
   }
 
 }

@@ -1,3 +1,34 @@
+.uc-top-bar {
+  position: sticky;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  color: var(--color-text);
+  background: var(--color-background-secondary);
+  border-bottom: 1px var(--color-accent) solid;
+  transition: transform 0.3s ease-in-out;
+  a.title {
+    font-weight: bold;
+  }
+  &.tsd-page-toolbar {
+    padding: 0.5rem;
+    a {
+      color: $anchor-color;
+      text-decoration: $anchor-text-decoration;
+    }
+    a.title:hover {
+      color: $anchor-color-hover;
+      text-decoration: $anchor-text-decoration-hover;
+    }
+  }
+  .top-bar {
+    max-width: 1700px;
+    padding: 0.5rem 2.5rem;
+    margin: 0 auto;
+    line-height: 40px;
+  }
+}
 .uc-container {
   @extend .grid-container, .fluid;
 }
