@@ -4,7 +4,8 @@ import { load as parseYaml } from 'js-yaml';
 import { Marked } from 'marked';
 import { markedHighlight } from 'marked-highlight';
 import { CodeHighlighter } from './code-highlighter.js';
-import { MdAttrs, MdOutput, MdRenderer, MdTocLink } from './md-renderer.js';
+import { MdAttrs, MdOutput, MdRenderer } from './md-renderer.js';
+import { MenuItem } from './menu.component.js';
 
 export class MarkedMdRenderer implements MdRenderer {
 
@@ -34,7 +35,7 @@ class MarkedMdParser {
   readonly #renderer: MarkedMdRenderer;
   readonly #attrs: MdAttrs;
   readonly #marked: Marked;
-  readonly #toc: MdTocLink[] = [];
+  readonly #toc: MenuItem[] = [];
 
   constructor(renderer: MarkedMdRenderer, attrs: MdAttrs | undefined) {
     this.#renderer = renderer;
@@ -83,7 +84,7 @@ class MarkedMdParser {
     return `<h${level} id="${slug}">${text}</h${level}>\n`;
   }
 
-  #addTocLink(link: MdTocLink): void {
+  #addTocLink(link: MenuItem): void {
     this.#toc.push(link);
   }
 

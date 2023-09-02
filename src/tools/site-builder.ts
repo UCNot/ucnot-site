@@ -1,17 +1,18 @@
 import { PromiseResolver } from '@proc7ts/async';
 import { noop } from '@proc7ts/primitives';
-import { JSX } from 'typedoc';
 import { SourceLayout } from '../fs/source-layout.js';
 import { TargetLayout } from '../fs/target-layout.js';
-import { MdAttrs, MdRenderer } from '../render/md-renderer.js';
-import { PageContext } from '../render/page-context.js';
+import { MdAttrs, MdOutput, MdRenderer } from '../render/md-renderer.js';
 import { DefaultPageTemplate, PageTemplate } from '../render/page.template.js';
+import { MdSitePage } from './md.site-page.js';
+import { SitePage } from './site-page.js';
 
 export class SiteBuilder {
 
   readonly #sourceLayout: SourceLayout;
   readonly #targetLayout: TargetLayout;
   readonly #mdRenderer: MdRenderer;
+  readonly #pages: SitePage[] = [];
   #build: SiteBuild = { tasks: [] };
 
   constructor({
@@ -58,16 +59,20 @@ export class SiteBuilder {
     },
   ): () => Promise<void> {
     return this.runTask(async () => {
-      const md = await this.#sourceLayout.contentDir().openFile(mdPath).readText();
-      const output = await this.#mdRenderer.renderMarkdown(md, attrs);
-      const context = new PageContext(htmlPath);
-      const html = template({
-        context,
-        output,
-      });
+      const output = await this.#renderMd(mdPath, attrs);
 
-      await this.#targetLayout.siteDir().openFile(htmlPath).writeText(JSX.renderElement(html));
+      this.#addPage(new MdSitePage(htmlPath, template, output));
     });
+  }
+
+  async #renderMd(mdPath: string, attrs: MdAttrs | undefined): Promise<MdOutput> {
+    const md = await this.#sourceLayout.contentDir().openFile(mdPath).readText();
+
+    return await this.#mdRenderer.renderMarkdown(md, attrs);
+  }
+
+  #addPage(page: SitePage): void {
+    this.#pages.push(page);
   }
 
   async buildSite(): Promise<void> {
@@ -77,11 +82,21 @@ export class SiteBuilder {
       return whenDone;
     }
 
-    const whenBuilt = Promise.all(tasks.map(async task => await task.run(this))).then(noop);
+    const whenBuilt = this.#buildSite(tasks);
 
     this.#build = { whenDone: whenBuilt };
 
     return whenBuilt;
+  }
+
+  async #buildSite(tasks: readonly SiteBuildTask[]): Promise<void> {
+    await Promise.all(tasks.map(async task => await task.run(this))).then(noop);
+    await Promise.all(
+      this.#pages.map(page => page.renderPage({
+          targetLayout: this.#targetLayout,
+          navLinks: this.#pages,
+        })),
+    );
   }
 
 }
