@@ -3,49 +3,74 @@ import GithubSlugger from 'github-slugger';
 import { load as parseYaml } from 'js-yaml';
 import { Marked } from 'marked';
 import { markedHighlight } from 'marked-highlight';
-import { AsyncLocalStorage } from 'node:async_hooks';
 import { CodeHighlighter } from './code-highlighter.js';
 import { MdAttrs, MdOutput, MdRenderer, MdTocLink } from './md-renderer.js';
 
 export class MarkedMdRenderer implements MdRenderer {
 
-  readonly #marked: Marked;
-  readonly #mdState = new AsyncLocalStorage<MarkedMdState>();
+  readonly #codeHighlighter: CodeHighlighter;
   readonly #ghSlugger = new GithubSlugger();
 
   constructor({ codeHighlighter }: { readonly codeHighlighter: CodeHighlighter }) {
+    this.#codeHighlighter = codeHighlighter;
+  }
+
+  get codeHighlighter(): CodeHighlighter {
+    return this.#codeHighlighter;
+  }
+
+  slug(text: string): string {
+    return this.#ghSlugger.slug(text);
+  }
+
+  async renderMarkdown(input: string, attrs?: MdAttrs): Promise<MdOutput> {
+    return await new MarkedMdParser(this, attrs).renderMarkdown(input);
+  }
+
+}
+
+class MarkedMdParser {
+
+  readonly #renderer: MarkedMdRenderer;
+  readonly #attrs: MdAttrs;
+  readonly #marked: Marked;
+  readonly #toc: MdTocLink[] = [];
+
+  constructor(renderer: MarkedMdRenderer, attrs: MdAttrs | undefined) {
+    this.#renderer = renderer;
+    this.#attrs = { ...attrs };
     this.#marked = new Marked(
       markedHighlight({
         async: true,
         langPrefix: 'uc-code uc-code-lang-',
-        highlight: async (code, lang) => await codeHighlighter.highlightCode(code, lang),
+        highlight: async (code, lang) => await this.#highlight(code, lang),
       }),
       {
         hooks: {
-          preprocess: this.#preprocess.bind(this),
+          preprocess: markdown => this.#preprocess(markdown),
           postprocess: html => html,
         },
         renderer: {
-          heading: this.#heading.bind(this),
+          heading: (text, level, raw, slugger) => this.#heading(text, level, raw, slugger),
         },
       },
     );
   }
 
-  #getState(): MarkedMdState {
-    return this.#mdState.getStore()!;
+  async #highlight(code: string, lang: string): Promise<string> {
+    return await this.#renderer.codeHighlighter.highlightCode(code, lang);
   }
 
   #preprocess(markdown: string): string {
     const { attrs, body } = parseFrontmatter(markdown);
 
-    Object.assign(this.#getState().attrs, attrs);
+    Object.assign(this.#attrs, attrs);
 
     return body;
   }
 
   #heading(text: string, level: number, raw: string, slugger: _Slugger): string {
-    const ghSlug = this.#ghSlugger.slug(
+    const ghSlug = this.#renderer.slug(
       raw
         .toLowerCase()
         .trim()
@@ -59,35 +84,19 @@ export class MarkedMdRenderer implements MdRenderer {
   }
 
   #addTocLink(link: MdTocLink): void {
-    this.#getState().toc.push(link);
+    this.#toc.push(link);
   }
 
   async renderMarkdown(input: string): Promise<MdOutput> {
-    return await this.#mdState.run(
-      {
-        attrs: {},
-        toc: [],
-      },
-      async (): Promise<MdOutput> => this.#renderMarkdown(input),
-    );
-  }
-
-  async #renderMarkdown(input: string): Promise<MdOutput> {
     const html = await this.#marked.parse(input);
-    const { attrs, toc } = this.#getState();
 
     return {
       html: html ?? '',
-      attrs,
-      toc,
+      attrs: this.#attrs,
+      toc: this.#toc,
     };
   }
 
-}
-
-interface MarkedMdState {
-  readonly attrs: MdAttrs;
-  readonly toc: MdTocLink[];
 }
 
 interface MdFrontmatter {

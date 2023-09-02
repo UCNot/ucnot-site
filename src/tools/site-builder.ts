@@ -3,9 +3,9 @@ import { noop } from '@proc7ts/primitives';
 import { JSX } from 'typedoc';
 import { SourceLayout } from '../fs/source-layout.js';
 import { TargetLayout } from '../fs/target-layout.js';
-import { MdRenderer } from '../render/md-renderer.js';
+import { MdAttrs, MdRenderer } from '../render/md-renderer.js';
 import { PageContext } from '../render/page-context.js';
-import { PageData, PageLayout, defaultPageLayout } from '../render/page.layout.js';
+import { DefaultPageTemplate, PageTemplate } from '../render/page.template.js';
 
 export class SiteBuilder {
 
@@ -45,28 +45,25 @@ export class SiteBuilder {
     return whenDone;
   }
 
-  mdPage<T extends PageData>(
+  mdPage(
     htmlPath: string,
     {
       mdPath,
-      layout = defaultPageLayout,
-      data,
+      template = DefaultPageTemplate,
+      attrs,
     }: {
       readonly mdPath: string;
-      readonly layout?: PageLayout<T> | undefined;
-      readonly data?: Omit<T, 'output'> | undefined;
+      readonly template?: PageTemplate | undefined;
+      readonly attrs?: MdAttrs | undefined;
     },
   ): () => Promise<void> {
     return this.runTask(async () => {
       const md = await this.#sourceLayout.contentDir().openFile(mdPath).readText();
-      const output = await this.#mdRenderer.renderMarkdown(md);
+      const output = await this.#mdRenderer.renderMarkdown(md, attrs);
       const context = new PageContext(htmlPath);
-      const html = layout({
+      const html = template({
         context,
-        data: {
-          ...data,
-          output,
-        } as T,
+        output,
       });
 
       await this.#targetLayout.siteDir().openFile(htmlPath).writeText(JSX.renderElement(html));

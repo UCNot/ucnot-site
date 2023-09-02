@@ -1,5 +1,5 @@
 export interface MdRenderer {
-  renderMarkdown(input: string): Promise<MdOutput>;
+  renderMarkdown(input: string, attrs?: MdAttrs): Promise<MdOutput>;
 }
 
 export interface MdOutput {

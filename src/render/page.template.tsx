@@ -3,21 +3,15 @@ import { TopBar } from './top-bar.component.js';
 import { PageContext } from './page-context.js';
 import { MdOutput } from './md-renderer.js';
 
-export type PageLayout<T extends PageData> = (props: PageProps<T>) => JSX.Element;
+export type PageTemplate = (props: PageProps) => JSX.Element;
 
-export interface PageProps<out T extends PageData> {
+export interface PageProps {
   readonly context: PageContext;
-  readonly data: T;
-}
-
-export interface PageData {
   readonly output: MdOutput;
-  readonly [key: string]: unknown;
 }
 
-export function defaultPageLayout<T extends PageData>(props: PageProps<T>): JSX.Element {
-  const { context, data } = props;
-  const { output } = data;
+export function DefaultPageTemplate(props: PageProps): JSX.Element {
+  const { context, output } = props;
   const { html, attrs, toc } = output;
   const { title = 'UCNot' } = attrs;
 
