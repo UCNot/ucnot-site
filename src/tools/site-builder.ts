@@ -54,14 +54,20 @@ export class SiteBuilder {
     }: {
       readonly mdPath: string;
       readonly layout?: PageLayout<T> | undefined;
-      readonly data: Omit<T, 'context'>;
+      readonly data?: Omit<T, 'output'> | undefined;
     },
   ): () => Promise<void> {
     return this.runTask(async () => {
       const md = await this.#sourceLayout.contentDir().openFile(mdPath).readText();
-      const content = await this.#mdRenderer.renderMarkdown(md);
+      const output = await this.#mdRenderer.renderMarkdown(md);
       const context = new PageContext(htmlPath);
-      const html = layout(() => content, { ...data, context } as T);
+      const html = layout({
+        context,
+        data: {
+          ...data,
+          output,
+        } as T,
+      });
 
       await this.#targetLayout.siteDir().openFile(htmlPath).writeText(JSX.renderElement(html));
     });

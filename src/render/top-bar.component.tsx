@@ -6,9 +6,13 @@ export function TopBar({ context }: { readonly context: PageContext }): JSX.Elem
     <header class="uc-top-bar">
       <div class="top-bar">
         <div class="top-bar-left">
-          <strong>
-            <a href={context.relative('/index.html')}>UCNot</a>
-          </strong>
+          <a
+            href={context.relative('/index.html')}
+            class="title"
+            title="URI Charge Notation"
+          >
+            UCNot
+          </a>
         </div>
         <div class="top-bar-right">
           <ul class="menu">

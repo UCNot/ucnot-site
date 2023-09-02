@@ -1,3 +1,7 @@
+---
+title: ChURI
+---
+
 # ChURI
 
 ChURI is a polyglot serializer, deserializer and validator supporting various data formats.

@@ -44,6 +44,7 @@ export function apiDocToolbar(
           <a
             href={context.pageContext.relative('/index.html')}
             class="title"
+            title="URI Charge Notation"
           >
             UCNot
           </a>

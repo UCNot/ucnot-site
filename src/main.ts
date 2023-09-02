@@ -12,9 +12,6 @@ const siteBuilder = new SiteBuilder({ sourceLayout, targetLayout, mdRenderer });
 
 siteBuilder.mdPage('index.html', {
   mdPath: 'index.md',
-  data: {
-    title: 'UCNot',
-  },
 });
 
 await siteBuilder.buildSite();
