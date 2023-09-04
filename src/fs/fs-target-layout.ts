@@ -14,7 +14,7 @@ export class FsTargetLayout implements TargetLayout {
   }: {
     readonly root?: string | undefined;
   } = {}) {
-    this.#rootDir = new FsTargetDir(root);
+    this.#rootDir = new FsTargetDir(this, root, '/');
   }
 
   rootDir(): TargetDir {
@@ -22,7 +22,7 @@ export class FsTargetLayout implements TargetLayout {
   }
 
   siteDir(): TargetDir {
-    return (this.#siteDir ??= this.rootDir().openSubDir('site'));
+    return (this.#siteDir ??= new FsTargetDir(this, resolve(this.rootDir().path, 'site'), '/'));
   }
 
 }

@@ -10,8 +10,8 @@ const codeHighlighter = new ShikiCodeHighlighter();
 const mdRenderer = new MarkedMdRenderer({ codeHighlighter });
 const siteBuilder = new SiteBuilder({ sourceLayout, targetLayout, mdRenderer });
 
-siteBuilder.mdPage('index.html', {
-  mdPath: 'index.md',
+siteBuilder.addMdPage('index.html', {
+  mdFile: 'index.md',
 });
 
 await siteBuilder.buildSite();

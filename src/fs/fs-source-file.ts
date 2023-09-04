@@ -1,4 +1,5 @@
 import { readFile } from 'node:fs/promises';
+import { extname } from 'node:path';
 import { SourceFile } from './source-file.js';
 
 export class FsSourceFile implements SourceFile {
@@ -11,6 +12,10 @@ export class FsSourceFile implements SourceFile {
 
   get path(): string {
     return this.#path;
+  }
+
+  extname(): string {
+    return extname(this.path);
   }
 
   async readText(): Promise<string> {
