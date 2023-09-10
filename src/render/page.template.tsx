@@ -32,7 +32,7 @@ export function DefaultPageTemplate(props: PageProps): JSX.Element {
         <title>{title === 'UCNot' ? title : `${title} | UCNot`}</title>
         <link
           rel="stylesheet"
-          href="css/app.css"
+          href={context.relative('/css/app.css')}
         />
       </head>
       <body>

@@ -105,7 +105,7 @@ interface MdFrontmatter {
   readonly body: string;
 }
 
-const FRONTMATTER_PATTERN = /^\s*\n?-{3,}\s*\n(.*)\n-{3,}\s*\n/;
+const FRONTMATTER_PATTERN = /^\s*\n?-{3,}\s*\n(.*)\n-{3,}\s*\n/s;
 
 function parseFrontmatter(markdown: string): MdFrontmatter {
   const match = FRONTMATTER_PATTERN.exec(markdown);

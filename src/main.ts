@@ -10,8 +10,8 @@ const codeHighlighter = new ShikiCodeHighlighter();
 const mdRenderer = new MarkedMdRenderer({ codeHighlighter });
 const siteBuilder = new SiteBuilder({ sourceLayout, targetLayout, mdRenderer });
 
-siteBuilder.addMdPage('index.html', {
-  mdFile: 'index.md',
-});
+siteBuilder.addMdPage('index.md');
+siteBuilder.addMdPage('charged-uri.md');
+siteBuilder.addMdDir('churi', { attrs: { section: 'churi' } });
 
 await siteBuilder.buildSite();

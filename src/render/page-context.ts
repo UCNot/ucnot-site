@@ -24,8 +24,24 @@ export class PageContext {
     return (this.#dir = lastSlash > 0 ? path.slice(0, lastSlash + 1) : '/');
   }
 
-  relative(path: string): string {
-    return relative(this.dir, path) || '.';
+  relative(link: string): string {
+    const hashIdx = link.indexOf('#');
+    let path: string;
+    let hash: string;
+
+    if (hashIdx < 0) {
+      path = link;
+      hash = '';
+    } else if (hashIdx) {
+      path = link.slice(0, hashIdx);
+      hash = link.slice(hashIdx);
+    } else {
+      return link;
+    }
+
+    const relPath = relative(this.dir, path);
+
+    return `${relPath}${hash}`;
   }
 
 }

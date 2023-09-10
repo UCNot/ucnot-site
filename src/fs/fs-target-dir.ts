@@ -1,5 +1,5 @@
 import { mkdir } from 'node:fs/promises';
-import { relative, resolve } from 'node:path';
+import { join, relative, resolve, sep } from 'node:path';
 import { FsTargetFile } from './fs-target-file.js';
 import { FsTargetLayout } from './fs-target-layout.js';
 import { TargetDir } from './target-dir.js';
@@ -19,11 +19,11 @@ export class FsTargetDir implements TargetDir {
     if (link != null) {
       this.#link = link;
     } else {
-      const rootPath = resolve(layout.rootDir().path);
+      const rootPath = resolve(layout.siteDir().path);
       const fullPath = resolve(rootPath, path);
       const relPath = relative(rootPath, fullPath);
 
-      this.#link = relPath.replaceAll('\\', '/') + '/';
+      this.#link = '/' + relPath.replaceAll('\\', '/') + '/';
     }
   }
 
@@ -47,7 +47,12 @@ export class FsTargetDir implements TargetDir {
   }
 
   openFile(path: string): TargetFile {
-    return new FsTargetFile(this, resolve(this.path, path));
+    const fullPath = resolve(this.path, path);
+    const relPath = relative(this.path, fullPath);
+    const pathParts = relPath.split(sep);
+    const dir = pathParts.length < 2 ? this : this.openSubDir(join(...pathParts.slice(0, -1)));
+
+    return new FsTargetFile(dir, fullPath);
   }
 
 }

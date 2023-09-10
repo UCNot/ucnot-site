@@ -240,7 +240,7 @@ $cite-pseudo-content: '\2014 \0020';
 $code-color: #f5f5f5;
 $code-font-family: $font-family-monospace;
 $code-font-weight: $global-weight-normal;
-$code-background: var(--code-background);
+$code-background: transparent;
 $code-border: none;
 $code-padding: rem-calc(2 5 1);
 $code-block-padding: 1rem;

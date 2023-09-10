@@ -46,7 +46,10 @@
 .hl-10 {
   color: var(--hl-10);
 }
-pre,
-code {
+.shiki pre,
+.shiki code {
+  background: transparent;
+}
+code:not(.uc-code) code {
   background: var(--code-background);
 }

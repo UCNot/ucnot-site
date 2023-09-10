@@ -66,9 +66,9 @@
   },
   "scripts": {
     "all": "run-z +z build,lint",
-    "build": "run-z +z build:site doc --then node --enable-source-maps ./dist/main.js",
+    "build": "run-z +z build:site,build:sass doc",
     "build:sass": "run-z +z --then sass -s compressed --source-map -I node_modules/foundation-sites/scss -I node_modules/motion-ui/src src/scss/app.scss target/site/css/app.css",
-    "build:site": "run-z +z compile,build:sass --then node --enable-source-maps ./dist/main.js",
+    "build:site": "run-z +z compile --then node --enable-source-maps ./dist/main.js",
     "compile": "run-z +z --then build-z",
     "ci:all": "run-z all +test/--ci/--runInBand",
     "clean": "run-z +z --then clean-z",

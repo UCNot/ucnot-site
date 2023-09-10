@@ -33,6 +33,9 @@ export abstract class SitePage {
   }
 
   compareTo(other: SitePage): number {
+    if (this.attrs.main) {
+      return -1;
+    }
     if (this.order < other.order) {
       return -1;
     }
