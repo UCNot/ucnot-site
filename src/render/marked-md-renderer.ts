@@ -1,4 +1,3 @@
-import { _Slugger } from 'Slugger';
 import GithubSlugger from 'github-slugger';
 import { load as parseYaml } from 'js-yaml';
 import { Marked } from 'marked';
@@ -52,7 +51,7 @@ class MarkedMdParser {
           postprocess: html => html,
         },
         renderer: {
-          heading: (text, level, raw, slugger) => this.#heading(text, level, raw, slugger),
+          heading: (text, level, raw) => this.#heading(text, level, raw),
         },
       },
     );
@@ -70,14 +69,13 @@ class MarkedMdParser {
     return body;
   }
 
-  #heading(text: string, level: number, raw: string, slugger: _Slugger): string {
-    const ghSlug = this.#renderer.slug(
+  #heading(text: string, level: number, raw: string): string {
+    const slug = this.#renderer.slug(
       raw
         .toLowerCase()
         .trim()
         .replace(/<[!/a-z].*?>/gi, ''),
     );
-    const slug = slugger.getNextSafeSlug(ghSlug, false);
 
     this.#addTocLink({ link: `#${slug}`, text: raw });
 
