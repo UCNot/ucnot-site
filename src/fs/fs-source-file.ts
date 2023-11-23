@@ -4,7 +4,7 @@ import { SourceFile } from './source-file.js';
 
 export class FsSourceFile implements SourceFile {
 
-  #path: string;
+  readonly #path: string;
 
   constructor(path: string) {
     this.#path = path;

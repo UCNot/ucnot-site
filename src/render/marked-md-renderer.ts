@@ -1,4 +1,4 @@
-import GithubSlugger from 'github-slugger';
+import githubSlugger from 'github-slugger';
 import { load as parseYaml } from 'js-yaml';
 import { Marked } from 'marked';
 import { markedHighlight } from 'marked-highlight';
@@ -9,7 +9,7 @@ import { MenuItem } from './menu.component.js';
 export class MarkedMdRenderer implements MdRenderer {
 
   readonly #codeHighlighter: CodeHighlighter;
-  readonly #ghSlugger = new GithubSlugger();
+  readonly #ghSlugger = new githubSlugger();
 
   constructor({ codeHighlighter }: { readonly codeHighlighter: CodeHighlighter }) {
     this.#codeHighlighter = codeHighlighter;

@@ -5,7 +5,7 @@ export class SiteSection {
 
   readonly #sectionId: string;
   #main: SitePage | undefined;
-  #pages: SitePage[] = [];
+  readonly #pages: SitePage[] = [];
 
   constructor(sectionId: string) {
     this.#sectionId = sectionId;
